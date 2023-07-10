@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MovieDB</string>
+    <string name="greeting_text">Hello Fellas,</string>
+    <string name="sub_greeting">Looking for popular movie?</string>
+</resources>
