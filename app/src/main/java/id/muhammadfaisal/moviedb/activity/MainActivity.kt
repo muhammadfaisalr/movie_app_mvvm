@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
         this.movieViewModel.moviesLiveData.observe(this) { movies ->
             for (movie in movies.results!!) {
                 Log.d(MainActivity::class.simpleName, "Adding Movie to list [${movie.title}]")
-                this.movieAdapter.addData(movie)
+                movieAdapter.addData(movie)
+                movieAdapter.notifyDataSetChanged()
             }
         }
     }

@@ -1,14 +1,19 @@
 package id.muhammadfaisal.moviedb.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import id.muhammadfaisal.moviedb.R
+import id.muhammadfaisal.moviedb.activity.DetailMovieActivity
 import id.muhammadfaisal.moviedb.api.model.response.ResultsItem
+import id.muhammadfaisal.moviedb.bottomsheet.GeneralHelper
 import id.muhammadfaisal.moviedb.databinding.ItemMovieBinding
+import id.muhammadfaisal.moviedb.util.Constant
 
 class PopularMovieAdapter(private val context: Context) : RecyclerView.Adapter<PopularMovieAdapter.ViewHolder>() {
     var results = mutableListOf<ResultsItem>()
@@ -23,6 +28,13 @@ class PopularMovieAdapter(private val context: Context) : RecyclerView.Adapter<P
                 .into(binding.imageMovie)
 
             this.binding.textTitle.text = resultsItem.title
+
+            this.itemView.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putSerializable(Constant.Key.DETAIL_MOVIE, resultsItem)
+
+                GeneralHelper.move(context, DetailMovieActivity::class.java, bundle, false)
+            }
         }
 
     }

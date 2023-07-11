@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import id.muhammadfaisal.moviedb.BuildConfig
 import id.muhammadfaisal.moviedb.api.repo.Repository
 import id.muhammadfaisal.moviedb.api.service.ApiService
 import id.muhammadfaisal.moviedb.util.Constant.Companion.BASE_URL

@@ -1,6 +1,7 @@
 package id.muhammadfaisal.moviedb.api.model.response
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class PopularMoviesResponse(
 
@@ -16,6 +17,7 @@ data class PopularMoviesResponse(
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null
 )
+
 
 data class ResultsItem(
 
@@ -60,4 +62,4 @@ data class ResultsItem(
 
 	@field:SerializedName("vote_count")
 	val voteCount: Int? = null
-)
+) : Serializable

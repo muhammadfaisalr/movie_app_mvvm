@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.muhammadfaisal.moviedb.api.model.response.GenresResponse
 import id.muhammadfaisal.moviedb.api.model.response.PopularMoviesResponse
+import id.muhammadfaisal.moviedb.api.model.response.ResultsItem
 import id.muhammadfaisal.moviedb.api.repo.Repository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
