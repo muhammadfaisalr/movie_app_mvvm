@@ -8,32 +8,69 @@
 
     <TextView
         android:id="@+id/textGreeting"
-        android:textSize="@dimen/sz_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:fontFamily="@font/poppins_semibold"
         android:text="@string/greeting_text"
-        android:layout_margin="16dp"
         android:textColor="@color/black_text"
+        android:textSize="@dimen/sz_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textSize="16sp"
-        android:fontFamily="@font/poppins"
         android:id="@+id/textSubGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textGreeting"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/sub_greeting"
         android:layout_marginHorizontal="16dp"
-        android:textColor="@color/gray_text"/>
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/sub_greeting"
+        android:textColor="@color/gray_text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textGreeting" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_input"
+        android:drawableStart="@drawable/round_search_24"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/gray_text"
+        android:fontFamily="@font/poppins"
+        android:hint="@string/search_movie"
+        android:paddingHorizontal="8dp"
+        android:textColor="@color/gray_text"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/buttonFilter"
+        app:layout_constraintEnd_toStartOf="@id/buttonFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textSubGreeting" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonFilter"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/filter"
+        android:textColor="@color/black_text"
+        app:icon="@drawable/round_sort_24"
+        app:iconTint="@color/black_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textSubGreeting" />
 
     <androidx.recyclerview.widget.RecyclerView
-        app:layout_constraintTop_toBottomOf="@id/textSubGreeting"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recyclerView"/>
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonFilter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

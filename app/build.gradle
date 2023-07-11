@@ -23,6 +23,7 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
         buildConfigField "String", "BACKEND_URL", "\"${properties.getProperty("BACKEND_URL")}\""
+        buildConfigField "String", "TOKEN_AUTH", "\"${properties.getProperty("TOKEN_AUTH")}\""
     }
 
     buildTypes {
@@ -39,11 +40,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 }
 
@@ -74,6 +75,9 @@ dependencies {
 
     //RxJava2 with Retrofit
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
+
+    //UI
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import id.muhammadfaisal.moviedb.BuildConfig
 import id.muhammadfaisal.moviedb.api.repo.Repository
 import id.muhammadfaisal.moviedb.api.service.ApiService
 import id.muhammadfaisal.moviedb.util.Constant.Companion.BASE_URL
@@ -41,6 +42,15 @@ object NetworkModule {
     fun provideOkhttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor {
+                val request = it.request()
+                    .newBuilder()
+                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZDJiMWNkZGZhYmFkY2VjMzYxN2Y5Y2FhODQ1ODI2YiIsInN1YiI6IjY0YWJjZWY4M2UyZWM4MDEwZGFjOTVlNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.h8MFrcERfyLIumQxfI0nw464VhHjboWHQHR_HjKgYRs")
+                    .build()
+
+                return@addInterceptor it.proceed(request)
+            }
+
         return okHttpClient.build()
     }
 
@@ -56,6 +66,7 @@ object NetworkModule {
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+
         return retrofit.build()
     }
 
