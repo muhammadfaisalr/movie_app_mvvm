@@ -10,6 +10,8 @@ import id.muhammadfaisal.moviedb.api.model.response.GenresResponse
 import id.muhammadfaisal.moviedb.api.model.response.PopularMoviesResponse
 import id.muhammadfaisal.moviedb.api.model.response.ResultsReview
 import id.muhammadfaisal.moviedb.api.model.response.ReviewsResponse
+import id.muhammadfaisal.moviedb.api.model.response.TrailerItem
+import id.muhammadfaisal.moviedb.api.model.response.TrailerResponse
 import id.muhammadfaisal.moviedb.api.repo.Repository
 import id.muhammadfaisal.moviedb.util.Constant
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,25 +24,38 @@ class MovieViewModel @Inject constructor(val repository: Repository): ViewModel(
     var moviesLiveData = MutableLiveData<PopularMoviesResponse>()
     var updatedMoviesData = MutableLiveData<PopularMoviesResponse>()
 
-    val genres = MutableLiveData<GenresResponse>()
-    var detailMovie = MutableLiveData<DetailMovieResponse>()
     var reviews = MutableLiveData<ReviewsResponse>()
+    var updatedReviews = MutableLiveData<ReviewsResponse>()
+
+    var trailers = MutableLiveData<TrailerResponse>()
+
+    var genres = MutableLiveData<GenresResponse>()
+    var detailMovie = MutableLiveData<DetailMovieResponse>()
+
+    val error = MutableLiveData<String>()
+
 
     private val selectedGenreIds = MutableLiveData<String>()
-    private val error = MutableLiveData<String>()
 
     private lateinit var disposable: Disposable
 
-    fun getPopularMoviesByGenre(genreIds: String, page: Int, state: Int) {
+    fun getPopularMoviesByGenre(genreIds: String, page: Int) {
         this.disposable = this.repository.getPopularMoviesByGenre(genreIds, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                if (state == Constant.State.NEW) {
-                    this.moviesLiveData.postValue(it)
-                } else {
-                    this.updatedMoviesData.postValue(it)
-                }
+                this.moviesLiveData.postValue(it)
+            }, {
+                this.error.postValue(it.toString())
+            })
+    }
+
+    fun loadMoreMovies(genreIds: String, page: Int) {
+        this.disposable = this.repository.getPopularMoviesByGenre(genreIds, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                this.updatedMoviesData.postValue(it)
             }, {
                 this.error.postValue(it.toString())
             })
@@ -68,8 +83,8 @@ class MovieViewModel @Inject constructor(val repository: Repository): ViewModel(
             })
     }
 
-    fun getMovieReviews(movieId: Int) {
-        this.disposable = this.repository.getMovieReviews(movieId)
+    fun getMovieReviews(movieId: Int, page: Int) {
+        this.disposable = this.repository.getMovieReviews(movieId, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -77,6 +92,32 @@ class MovieViewModel @Inject constructor(val repository: Repository): ViewModel(
             }, {
                 this.error.postValue(it.toString())
             })
+    }
+
+    fun loadMoreReviews(movieId: Int, page: Int) {
+        this.disposable = this.repository.getMovieReviews(movieId, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                this.updatedReviews.postValue(it)
+            }, {
+                this.error.postValue(it.toString())
+            })
+    }
+
+    fun getMovieTrailer(movieId: Int) {
+        this.disposable = this.repository.getMovieTrailer(movieId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                this.trailers.postValue(it)
+            }, {
+                this.error.postValue(it.toString())
+            })
+    }
+
+    fun getTrailerByPos(pos:Int) : TrailerItem? {
+        return this.trailers.value?.results?.get(pos)
     }
 
     fun setSelectedGenre(genreIds: String) {

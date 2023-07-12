@@ -9,7 +9,8 @@
     </data>
 
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/nestedScrollView"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -37,7 +38,8 @@
                 android:layout_margin="16dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@{viewModel.detailMovie.title}"
-                android:textSize="24sp"
+                android:textColor="@color/black_text"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +77,6 @@
                 app:layout_constraintTop_toBottomOf="@id/cardImage" />
 
             <TextView
-                app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/textSynopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,8 +86,30 @@
                 android:text="@{viewModel.detailMovie.overview}"
                 android:textColor="@color/dark_gray_text"
                 android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textSynopsisTitle" />
+
+            <TextView
+                android:id="@+id/textTrailerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/trailer"
+                android:textColor="@color/black_text"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textSynopsis" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerTrailer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textTrailerTitle" />
 
             <TextView
                 android:id="@+id/textUserReviewTitle"
@@ -98,15 +121,47 @@
                 android:textColor="@color/black_text"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textSynopsis" />
+                app:layout_constraintTop_toBottomOf="@id/recyclerTrailer" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerReview"
-                android:layout_marginTop="8dp"
+            <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/textUserReviewTitle"/>
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/textUserReviewTitle">
 
+                <TextView
+                    android:layout_margin="16dp"
+                    android:id="@+id/textEmpty"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/gray_text"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_reviews"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:id="@+id/recyclerReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

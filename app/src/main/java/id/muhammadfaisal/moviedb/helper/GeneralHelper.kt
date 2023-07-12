@@ -1,4 +1,4 @@
-package id.muhammadfaisal.moviedb.bottomsheet
+package id.muhammadfaisal.moviedb.helper
 
 import android.content.Context
 import android.content.Intent

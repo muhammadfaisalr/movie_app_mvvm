@@ -35,11 +35,22 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
                 Html.FROM_HTML_MODE_COMPACT
             ).toString()
 
+            val avatarPath = resultReview.authorDetails.avatarPath
+            if (avatarPath != null) {
+                var imgUrl = avatarPath
 
-            val imgurl = Constant.IMAGE_URL + resultReview.authorDetails.avatarPath
-            Glide.with(binding.imageUser)
-                .load(imgurl)
-                .into(binding.imageUser)
+                if (!avatarPath.contains("https")) {
+                    imgUrl = Constant.IMAGE_URL + resultReview.authorDetails.avatarPath
+                } else {
+                    if (avatarPath.first() == '/') {
+                        imgUrl = avatarPath.replaceFirst("/", "", false)
+                    }
+                }
+
+                Glide.with(binding.imageUser)
+                    .load(imgUrl)
+                    .into(binding.imageUser)
+            }
         }
 
     }

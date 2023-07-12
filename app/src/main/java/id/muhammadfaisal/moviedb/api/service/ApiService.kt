@@ -4,6 +4,7 @@ import id.muhammadfaisal.moviedb.api.model.response.DetailMovieResponse
 import id.muhammadfaisal.moviedb.api.model.response.GenresResponse
 import id.muhammadfaisal.moviedb.api.model.response.PopularMoviesResponse
 import id.muhammadfaisal.moviedb.api.model.response.ReviewsResponse
+import id.muhammadfaisal.moviedb.api.model.response.TrailerResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -20,9 +21,10 @@ interface ApiService {
     fun getDetailMovie(@Path("id") movieId: Int): Single<DetailMovieResponse>
 
     @GET("movie/{id}/reviews")
-    fun getMovieReviews(@Path("id") movieId: Int): Single<ReviewsResponse>
+    fun getMovieReviews(@Path("id") movieId: Int, @Query("page") page: Int): Single<ReviewsResponse>
 
-
+    @GET("movie/{id}/videos")
+    fun getMovieTrailers(@Path("id") movieId: Int): Single<TrailerResponse>
 
     @GET("genre/movie/list")
     fun getGenres(): Single<GenresResponse>

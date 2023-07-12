@@ -10,8 +10,7 @@ import com.bumptech.glide.Glide
 import id.muhammadfaisal.moviedb.R
 import id.muhammadfaisal.moviedb.activity.DetailMovieActivity
 import id.muhammadfaisal.moviedb.api.model.response.ResultsItem
-import id.muhammadfaisal.moviedb.api.model.response.ResultsReview
-import id.muhammadfaisal.moviedb.bottomsheet.GeneralHelper
+import id.muhammadfaisal.moviedb.helper.GeneralHelper
 import id.muhammadfaisal.moviedb.databinding.ItemMovieBinding
 import id.muhammadfaisal.moviedb.util.Constant
 
@@ -54,8 +53,8 @@ class PopularMovieAdapter(private val context: Context) : RecyclerView.Adapter<P
         return this.results.size
     }
 
-    fun setData(results: List<ResultsItem>) {
-        this.results = results.toMutableList()
+    fun setData(results: MutableList<ResultsItem>) {
+        this.results = results
         notifyDataSetChanged()
     }
 

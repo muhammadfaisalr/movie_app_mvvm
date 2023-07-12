@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +24,7 @@ import id.muhammadfaisal.moviedb.api.model.response.ResultsItem
 import id.muhammadfaisal.moviedb.api.model.response.ResultsReview
 import id.muhammadfaisal.moviedb.bottomsheet.FilterBottomSheetDialogFragment
 import id.muhammadfaisal.moviedb.databinding.ActivityMainBinding
+import id.muhammadfaisal.moviedb.helper.ViewHelper
 import id.muhammadfaisal.moviedb.listener.BottomSheetListener
 import id.muhammadfaisal.moviedb.util.Constant
 import id.muhammadfaisal.moviedb.vm.MovieViewModel
@@ -53,8 +57,7 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
     }
 
     private fun setupRecyclerView() {
-        this.binding.recyclerView.layoutManager =
-            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        this.binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         this.binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 this,
@@ -66,26 +69,33 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
     }
 
     private fun data() {
-        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page, Constant.State.NEW)
+        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page)
         this.movieViewModel.moviesLiveData.observe(this) { movies ->
             this.movieAdapter.setData(movies.results!!)
+            ViewHelper.gone(this.binding.progressBar)
+        }
+
+        this.movieViewModel.error.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            ViewHelper.gone(this.binding.progressBar)
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addData() {
-        Log.d(MainActivity::class.simpleName, "Adding Data from page [$page]")
-        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page, Constant.State.UPDATE)
+        this.page++
+        this.movieViewModel.loadMoreMovies(this.genreIds, this.page)
         this.movieViewModel.updatedMoviesData.observe(this) { movies ->
+            val results = movies.results!!
+            val lMovies = ArrayList(results)
+            results.clear()
 
-            if (movies.results is List<ResultsItem>) {
-                val movieList = movies.results
-                for (movie in movieList) {
-                    Log.d(MainActivity::class.simpleName, "Adding Movie to list [${movie.title}]")
-                    movieAdapter.addData(movie)
-                    movieAdapter.notifyDataSetChanged()
-                }
+            for (movie in lMovies) {
+                Log.d(MainActivity::class.simpleName, "Adding Movie to list [${movie.title}]")
+                this.movieViewModel.moviesLiveData.value?.results?.add(movie)
+                this.binding.recyclerView.adapter?.notifyDataSetChanged()
             }
+
+            ViewHelper.gone(this.binding.progressBar)
         }
     }
 
@@ -97,20 +107,27 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
         this.badgeDrawable = BadgeDrawable.create(this)
         this.movies = ArrayList()
 
+        var continueScroll = true
         this.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (!recyclerView.canScrollVertically(1)) {
 
+                    if (continueScroll) {
+                        ViewHelper.visible(binding.progressBar)
+                        continueScroll = false
+                    }
+
                     Handler(Looper.getMainLooper()).postDelayed({
-                        page++
+                        continueScroll = true
                         addData()
                     }, 2000L)
 
                 }
+
             }
         })
 
-        this.binding.buttonFilter.setOnClickListener {
+        this.binding.exfabFilter.setOnClickListener {
             val bottomSheet = FilterBottomSheetDialogFragment(this)
             bottomSheet.show(this.supportFragmentManager, MainActivity::class.java.simpleName)
         }
@@ -122,14 +139,16 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
         if (this.genreIds != "") {
             val badgeNumber = genreIds.split(",").size
 
-            this.badgeDrawable.backgroundColor = this.getColor(R.color.orange_light)
+            this.badgeDrawable.backgroundColor = this.getColor(R.color.black_text)
             this.badgeDrawable.number = badgeNumber
+            this.badgeDrawable.badgeTextColor = this.getColor(R.color.white)
 
-            BadgeUtils.attachBadgeDrawable(this.badgeDrawable, this.binding.buttonFilter)
+            BadgeUtils.attachBadgeDrawable(this.badgeDrawable, this.binding.exfabFilter)
         } else {
-            BadgeUtils.detachBadgeDrawable(this.badgeDrawable, this.binding.buttonFilter)
+            BadgeUtils.detachBadgeDrawable(this.badgeDrawable, this.binding.exfabFilter)
         }
 
         this.data()
+        this.setupRecyclerView()
     }
 }

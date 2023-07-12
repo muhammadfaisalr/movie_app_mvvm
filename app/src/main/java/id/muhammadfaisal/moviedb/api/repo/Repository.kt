@@ -12,5 +12,7 @@ class Repository @Inject constructor(private val apiService: ApiService) {
 
     fun getDetailMovie(movieId: Int) = this.apiService.getDetailMovie(movieId)
 
-    fun getMovieReviews(movieId: Int) = this.apiService.getMovieReviews(movieId)
+    fun getMovieReviews(movieId: Int, page: Int) = this.apiService.getMovieReviews(movieId, page)
+
+    fun getMovieTrailer(movieId: Int) = this.apiService.getMovieTrailers(movieId)
 }
