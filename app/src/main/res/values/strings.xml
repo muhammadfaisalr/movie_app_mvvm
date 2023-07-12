@@ -9,4 +9,5 @@
     <string name="filter_movie">Filter Movie</string>
     <string name="save">Save</string>
     <string name="synopsis">Synopsis</string>
+    <string name="user_reviews">User Reviews</string>
 </resources>

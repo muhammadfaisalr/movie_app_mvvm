@@ -1,7 +1,6 @@
 package id.muhammadfaisal.moviedb.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import com.bumptech.glide.Glide
 import id.muhammadfaisal.moviedb.R
 import id.muhammadfaisal.moviedb.activity.DetailMovieActivity
 import id.muhammadfaisal.moviedb.api.model.response.ResultsItem
+import id.muhammadfaisal.moviedb.api.model.response.ResultsReview
 import id.muhammadfaisal.moviedb.bottomsheet.GeneralHelper
 import id.muhammadfaisal.moviedb.databinding.ItemMovieBinding
 import id.muhammadfaisal.moviedb.util.Constant
@@ -21,7 +21,7 @@ class PopularMovieAdapter(private val context: Context) : RecyclerView.Adapter<P
 
         private val binding = ItemMovieBinding.bind(view)
         fun bind(context: Context, resultsItem: ResultsItem) {
-            val imgUrl = "https://image.tmdb.org/t/p/w500${resultsItem.posterPath}"
+            val imgUrl = Constant.IMAGE_URL + resultsItem.posterPath
 
             Glide.with(context)
                 .load(imgUrl)
@@ -31,7 +31,7 @@ class PopularMovieAdapter(private val context: Context) : RecyclerView.Adapter<P
 
             this.itemView.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putSerializable(Constant.Key.DETAIL_MOVIE, resultsItem)
+                bundle.putInt(Constant.Key.MOVIE_ID, resultsItem.id)
 
                 GeneralHelper.move(context, DetailMovieActivity::class.java, bundle, false)
             }

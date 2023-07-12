@@ -1,9 +1,12 @@
 package id.muhammadfaisal.moviedb.api.service
 
+import id.muhammadfaisal.moviedb.api.model.response.DetailMovieResponse
 import id.muhammadfaisal.moviedb.api.model.response.GenresResponse
 import id.muhammadfaisal.moviedb.api.model.response.PopularMoviesResponse
+import id.muhammadfaisal.moviedb.api.model.response.ReviewsResponse
 import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -12,6 +15,14 @@ interface ApiService {
 
     @GET("movie/popular")
     fun getPopularMoviesByGenre(@Query("with_genres") genreIds: String, @Query("page") page: Int): Single<PopularMoviesResponse>
+
+    @GET("movie/{id}")
+    fun getDetailMovie(@Path("id") movieId: Int): Single<DetailMovieResponse>
+
+    @GET("movie/{id}/reviews")
+    fun getMovieReviews(@Path("id") movieId: Int): Single<ReviewsResponse>
+
+
 
     @GET("genre/movie/list")
     fun getGenres(): Single<GenresResponse>

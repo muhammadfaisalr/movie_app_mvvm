@@ -9,4 +9,8 @@ class Repository @Inject constructor(private val apiService: ApiService) {
     fun getGenres() = this.apiService.getGenres()
 
     fun getPopularMoviesByGenre(genreIds: String, page:Int) = this.apiService.getPopularMoviesByGenre(genreIds, page)
+
+    fun getDetailMovie(movieId: Int) = this.apiService.getDetailMovie(movieId)
+
+    fun getMovieReviews(movieId: Int) = this.apiService.getMovieReviews(movieId)
 }

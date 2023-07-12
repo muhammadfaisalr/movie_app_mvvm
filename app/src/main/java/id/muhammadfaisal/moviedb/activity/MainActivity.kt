@@ -1,14 +1,11 @@
 package id.muhammadfaisal.moviedb.activity
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,12 +16,14 @@ import com.google.android.material.badge.ExperimentalBadgeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import id.muhammadfaisal.moviedb.R
 import id.muhammadfaisal.moviedb.adapter.PopularMovieAdapter
+import id.muhammadfaisal.moviedb.api.model.response.PopularMoviesResponse
 import id.muhammadfaisal.moviedb.api.model.response.ResultsItem
+import id.muhammadfaisal.moviedb.api.model.response.ResultsReview
 import id.muhammadfaisal.moviedb.bottomsheet.FilterBottomSheetDialogFragment
 import id.muhammadfaisal.moviedb.databinding.ActivityMainBinding
 import id.muhammadfaisal.moviedb.listener.BottomSheetListener
+import id.muhammadfaisal.moviedb.util.Constant
 import id.muhammadfaisal.moviedb.vm.MovieViewModel
-import okhttp3.internal.notify
 
 @ExperimentalBadgeUtils
 @AndroidEntryPoint
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
     }
 
     private fun data() {
-        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page)
+        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page, Constant.State.NEW)
         this.movieViewModel.moviesLiveData.observe(this) { movies ->
             this.movieAdapter.setData(movies.results!!)
         }
@@ -76,12 +75,16 @@ class MainActivity : AppCompatActivity(), BottomSheetListener {
     @SuppressLint("NotifyDataSetChanged")
     fun addData() {
         Log.d(MainActivity::class.simpleName, "Adding Data from page [$page]")
-        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page)
-        this.movieViewModel.moviesLiveData.observe(this) { movies ->
-            for (movie in movies.results!!) {
-                Log.d(MainActivity::class.simpleName, "Adding Movie to list [${movie.title}]")
-                movieAdapter.addData(movie)
-                movieAdapter.notifyDataSetChanged()
+        this.movieViewModel.getPopularMoviesByGenre(this.genreIds, this.page, Constant.State.UPDATE)
+        this.movieViewModel.updatedMoviesData.observe(this) { movies ->
+
+            if (movies.results is List<ResultsItem>) {
+                val movieList = movies.results
+                for (movie in movieList) {
+                    Log.d(MainActivity::class.simpleName, "Adding Movie to list [${movie.title}]")
+                    movieAdapter.addData(movie)
+                    movieAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
